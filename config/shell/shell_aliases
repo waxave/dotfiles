@@ -1,0 +1,161 @@
+#!/bin/bash
+
+# tuned
+alias reload-bash="exec $SHELL -l"
+alias workspace="cd ~/.workspace"
+alias w="workspace"
+alias reload="source ~/.zshrc && echo 'Shell config reloaded from ~/.zshrc'"
+alias where="which"
+
+# listing
+alias cp="cp -iv"
+alias mv="mv -iv"
+alias mkdir="mkdir -pv"
+alias less="less -FSRXc"
+alias edit="code"
+alias ~="cd ~"
+# alias which="type -all"
+alias path="echo -e ${PATH//:/\\n}"
+alias show_options="shopt"
+alias fix_stty="stty sane"
+alias cic="set completion-ignore-case On"
+
+# Enable aliases to be sudo’ed
+alias sudo="sudo "
+
+# Shortcuts
+alias o="open"
+alias oo="open ."
+alias e="$EDITOR"
+alias g="git"
+alias v="vim"
+alias gh="github"
+alias rm="trash"
+alias x+="chmod +x"
+alias -- +x="chmod +x"
+alias c="clear"
+alias nv="nvim"
+alias v="vim"
+
+# Easier navigation: .., ..., ~ and -
+alias ..="cd .."
+alias cd..="cd .."
+cd() { builtin cd "$@"; ll; }
+
+# mv, rm, cp, gunzip
+alias mv="mv -v"
+alias rm="rm -i -v"
+alias cp="cp -v"
+
+# Be nice
+alias htop="sudo htop"
+alias hosts="sudo $EDITOR /etc/hosts"
+
+# Copy my public key to the pasteboard
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\n'"
+
+# Git aliases
+# More Git tips http://firstaidgit.io/
+alias gss="git status -s"
+alias g+="git add"
+alias gp="git push origin"
+alias gpt="git push origin HEAD && git push --tags"
+alias wip="git commit -m'WIP' . && git push origin HEAD"
+alias gl="git log"
+alias glp5="git log -5 --pretty --oneline" # view your last 5 latest commits each on their own line
+alias glt="git log --all --graph --decorate --oneline --simplify-by-decoration" # pretty branch status
+alias glsw="git log -S" # search the commit history for the word puppy and display matching commits (glsw [word])
+alias gs="git status"
+alias gd="git diff"
+alias gm="git commit -m"
+alias gam="git commit -am"
+alias gb="git branch"
+alias gc="git checkout"
+alias gra="git remote add"
+alias grr="git remote rm"
+alias gbt="git_list_branches"
+alias gpu="git pull origin HEAD --prune"
+alias gcl="git clone"
+alias gta="git tag -a -m"
+alias gf="git reflog" # allows you to see every step you have made with git allowing you to retract and reinstate your steps
+alias gap="git add -p" # step through each change, or hunk
+alias gsl="git shortlog -sn" # quickly get a list of contributors and see how many commits each person has
+alias gws="git diff --shortstat '@{0 day ago}'" # how many lines of code you have written today
+alias gwts="git ls-files | xargs wc -l" # count number of lines of code in a git project
+alias ggmp="git checkout -" # jump back to to your last branch
+alias gst="git stash" # stash git changes and put them into your list
+alias gdtp="git stash pop" # bring back your changes, but it removes them from your stash
+alias gchp="git cherry-pick" # cherry pick the committed code in your own branch (gchp [hash])
+alias gcln="git clean -xfd" # remove untracked files
+
+# Undo a `git push`
+alias undopush="git push -f origin HEAD^:master"
+
+# Gist
+alias gist-paste="gist --private --copy --paste --filename"  # gist-paste filename.ext -- create private Gist from the clipboard contents
+alias gist-file="gist --private --copy"  # gist-file filename.ext -- create private Gist from a file
+
+# Download file and save it with filename of remote file
+alias get="curl -O -L"
+
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en1"
+alias myip="ifconfig | grep 'inet ' | grep -v 127.0.0.1 | awk '{print \$2}'"
+
+# Flush fonts cache
+alias ff="fc-cache -v"
+
+# File size
+alias fs="stat -f \"%z bytes\""
+
+# HTTP Requests. One of @janmoesen’s ProTip™s
+for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
+  alias "$method"="lwp-request -m '$method'"
+done
+
+## Alias section
+alias cp="cp -i"                                                # Confirm before overwriting something
+alias df='df -h'                                                # Human-readable sizes
+alias free='free -m'                                            # Show sizes in MB
+alias gitu='git add . && git commit && git push'
+alias grub-update='sudo grub-mkconfig -o /boot/grub/grub.cfg'
+alias mirror-update='sudo reflector --verbose -c Indonesia -c Japan -c Singapore --sort rate --save /etc/pacman.d/mirrorlist'
+alias mtar='tar -zcvf' # mtar <archive_compress>
+alias utar='tar -zxvf' # utar <archive_decompress> <file_list>
+alias z='zip -r' # z <archive_compress> <file_list>
+alias uz='unzip' # uz <archive_decompress> -d <dir>
+alias sr='source ~/.zshrc'
+alias ..="cd .."
+alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"
+alias mkdir="mkdir -p"
+alias fm='ranger'
+alias pacs="pacman -Slq | fzf -m --preview 'cat <(pacman -Si {1}) <(pacman -Fl {1} | awk \"{print \$2}\")' | xargs -ro sudo pacman -S"
+alias pars="paru -Slq | fzf -m --preview 'cat <(paru -Si {1}) <(paru -Fl {1} | awk \"{print \$2}\")' | xargs -ro  paru -S"
+alias pacr="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
+alias p="pacman -Q | fzf"
+alias wifi="nmtui-connect"
+alias cat="bat --color always --plain"
+alias grep='grep --color=auto'
+alias v='nvim'
+alias mv='mv -v'
+alias cp='cp -vr'
+alias rm='rm -vr'
+
+alias icat="kitty +kitten icat --align=left"
+alias codeaf="cd /home/waxave/snap/exercism/5/exercism/"
+alias hx="helix"
+alias ew="codeaf"
+alias cc="xclip -selection clipboard"
+alias pwdc="pwd | cc"
+alias show-pub="cat ~/.ssh/id_rsa.pub"
+alias copy-pub="show-pub | cc"
+
+## Colorize the ls output ##
+alias ls='ls --color=auto'
+
+## Use a long listing format ##
+alias ll='ls -la'
+
+## Show hidden files ##
+alias l.='ls -d .* --color=auto'

@@ -1,0 +1,1 @@
+/home/xexuy/.dotfiles/config/kak/plugins/base16-gruvbox.kak

@@ -1,0 +1,6 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+/config/kak/plugins
+/config/kak/kak
+/config/nvim/nvim
+/config/helix/helix
+/config/awesome/awesome

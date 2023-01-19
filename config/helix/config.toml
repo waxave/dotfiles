@@ -1,0 +1,20 @@
+theme = "catppuccin_italics"
+
+[editor]
+line-number = "absolute"
+cursor-shape = { insert = "bar" }
+whitespace.render = "all"
+whitespace.characters = { space = " ", tab = "▏", newline = "¬" }
+auto-completion = true
+cursorline = true
+indent-guides.render = true
+color-modes = true
+
+# Keymap for the Colemak layout and Kakoune habits (who needs a select mode)
+[keys.normal]
+"#" = "toggle_comments"
+"$" = "extend_to_line_end"
+"^" = "extend_to_line_start"
+"{" = "goto_prev_paragraph"
+"}" = "goto_next_paragraph"
+C-p = "file_picker"

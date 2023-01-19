@@ -1,0 +1,259 @@
+#!/bin/bash
+
+# Create a new directory and enter it
+function md() {
+  mkdir -p "$@" && cd "$@"
+}
+
+# find shorthand
+function f() {
+  find . -name "$1" 2>&1 | grep -v 'Permission denied'
+}
+
+# List all files, long format, colorized, permissions in octal
+function la() {
+   ls -l  "$@" | awk '
+    {
+      k=0;
+      for (i=0;i<=8;i++)
+        k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));
+      if (k)
+        printf("%0o ",k);
+      printf(" %9s  %3s %2s %5s  %6s  %s %s %s\n", $3, $6, $7, $8, $5, $9,$10, $11);
+    }'
+}
+
+# cd into whatever is the forefront Finder window.
+cdf () {  # short for cdfinder
+  cd "`osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)'`"
+}
+
+
+# Start an HTTP server from a directory, optionally specifying the port
+function server() {
+  local port="${1:-8000}"
+  open "http://localhost:${port}/"
+  # Set the default Content-Type to `text/plain` instead of `application/octet-stream`
+  # And serve everything as UTF-8 (although not technically correct, this doesn’t break anything for binary files)
+  python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
+}
+
+
+# Copy w/ progress
+cp_p () {
+  rsync -WavP --human-readable --progress $1 $2
+}
+
+# qfind - used to quickly find files that contain a string in a directory
+qfind () {
+  find . -exec grep -l -s $1 {} \;
+  return 0
+}
+
+# get gzipped size
+function gz() {
+  echo "orig size    (bytes): "
+  cat "$1" | wc -c
+  echo "gzipped size (bytes): "
+  gzip -c "$1" | wc -c
+}
+
+# Extract archives - use: extract <file>
+# Based on http://dotfiles.org/~pseup/.bashrc
+function extract() {
+  if [ -f "$1" ] ; then
+    local filename=$(basename "$1")
+    local foldername="${filename%%.*}"
+    local fullpath=`perl -e 'use Cwd "abs_path";print abs_path(shift)' "$1"`
+    local didfolderexist=false
+    if [ -d "$foldername" ]; then
+      didfolderexist=true
+      read -p "$foldername already exists, do you want to overwrite it? (y/n) " -n 1
+      echo
+      if [[ $REPLY =~ ^[Nn]$ ]]; then
+        return
+      fi
+    fi
+    mkdir -p "$foldername" && cd "$foldername"
+    case $1 in
+      *.tar.bz2) tar xjf "$fullpath" ;;
+      *.tar.gz) tar xzf "$fullpath" ;;
+      *.tar.xz) tar Jxvf "$fullpath" ;;
+      *.tar.Z) tar xzf "$fullpath" ;;
+      *.tar) tar xf "$fullpath" ;;
+      *.taz) tar xzf "$fullpath" ;;
+      *.tb2) tar xjf "$fullpath" ;;
+      *.tbz) tar xjf "$fullpath" ;;
+      *.tbz2) tar xjf "$fullpath" ;;
+      *.tgz) tar xzf "$fullpath" ;;
+      *.txz) tar Jxvf "$fullpath" ;;
+      *.zip) unzip "$fullpath" ;;
+      *) echo "'$1' cannot be extracted via extract()" && cd .. && ! $didfolderexist && rm -r "$foldername" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
+ZSH_THEME_TERM_TITLE_IDLE="%n@%m:%~"
+
+# Runs before showing the prompt
+function mzc_termsupport_precmd {
+  [[ "${DISABLE_AUTO_TITLE:-}" == true ]] && return
+  title $ZSH_THEME_TERM_TAB_TITLE_IDLE $ZSH_THEME_TERM_TITLE_IDLE
+}
+
+# Runs before executing the command
+function mzc_termsupport_preexec {
+  [[ "${DISABLE_AUTO_TITLE:-}" == true ]] && return
+
+  emulate -L zsh
+
+  # split command into array of arguments
+  local -a cmdargs
+  cmdargs=("${(z)2}")
+  # if running fg, extract the command from the job description
+  if [[ "${cmdargs[1]}" = fg ]]; then
+    # get the job id from the first argument passed to the fg command
+    local job_id jobspec="${cmdargs[2]#%}"
+    # logic based on jobs arguments:
+    # http://zsh.sourceforge.net/Doc/Release/Jobs-_0026-Signals.html#Jobs
+    # https://www.zsh.org/mla/users/2007/msg00704.html
+    case "$jobspec" in
+      <->) # %number argument:
+        # use the same <number> passed as an argument
+        job_id=${jobspec} ;;
+      ""|%|+) # empty, %% or %+ argument:
+        # use the current job, which appears with a + in $jobstates:
+        # suspended:+:5071=suspended (tty output)
+        job_id=${(k)jobstates[(r)*:+:*]} ;;
+      -) # %- argument:
+        # use the previous job, which appears with a - in $jobstates:
+        # suspended:-:6493=suspended (signal)
+        job_id=${(k)jobstates[(r)*:-:*]} ;;
+      [?]*) # %?string argument:
+        # use $jobtexts to match for a job whose command *contains* <string>
+        job_id=${(k)jobtexts[(r)*${(Q)jobspec}*]} ;;
+      *) # %string argument:
+        # use $jobtexts to match for a job whose command *starts with* <string>
+        job_id=${(k)jobtexts[(r)${(Q)jobspec}*]} ;;
+    esac
+
+    # override preexec function arguments with job command
+    if [[ -n "${jobtexts[$job_id]}" ]]; then
+      1="${jobtexts[$job_id]}"
+      2="${jobtexts[$job_id]}"
+    fi
+  fi
+
+  # cmd name only, or if this is sudo or ssh, the next cmd
+  local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
+  local LINE="${2:gs/%/%%}"
+
+  title '$CMD' '%100>...>$LINE%<<'
+}
+
+# Set terminal window and tab/icon title
+#
+# usage: title short_tab_title [long_window_title]
+#
+# See: http://www.faqs.org/docs/Linux-mini/Xterm-Title.html#ss3.1
+# Fully supports screen and probably most modern xterm and rxvt
+# (In screen, only short_tab_title is used)
+function title {
+  emulate -L zsh
+  setopt prompt_subst
+
+  [[ "$EMACS" == *term* ]] && return
+
+  # if $2 is unset use $1 as default
+  # if it is set and empty, leave it as is
+  : ${2=$1}
+
+  case "$TERM" in
+    xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty|st*)
+      print -Pn "\e]2;${2:q}\a" # set window name
+      print -Pn "\e]1;${1:q}\a" # set tab name
+      ;;
+    screen*|tmux*)
+      print -Pn "\ek${1:q}\e\\" # set screen hardstatus
+      ;;
+    *)
+    # Try to use terminfo to set the title
+    # If the feature is available set title
+    if [[ -n "$terminfo[fsl]" ]] && [[ -n "$terminfo[tsl]" ]]; then
+      echoti tsl
+      print -Pn "$1"
+      echoti fsl
+    fi
+      ;;
+  esac
+}
+
+# custom function
+toppy() {
+  history | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl |  head -n 21
+}
+
+cd() {
+	builtin cd "$@" && command ls --group-directories-first --color=auto -F
+}
+
+mcd () {
+  mkdir -p $1
+  cd $1
+}
+
+create-ssh-key () {
+  EMAIL_PARAM=$1
+  FILE="~/.ssh/id_rsa.pub"
+
+  if [[ -z "$EMAIL_PARAM" ]]; then
+    echo "You need to pass the email arg \n\n"
+    echo "Usage modes: "
+    echo "\tcreate-ssh-key someemail@somedomain.com"
+    echo "\tcsk someemail@somedomain.com (short mode)"
+  elif [[ -n "$EMAIL_PARAM" ]]; then
+    if [ ! -f "$FILE" ]; then
+      # ssh-keygen -t rsa -C $EMAIL_PARAM
+    fi
+    copy-pub
+    show-pub
+  fi
+}
+alias csk="create-ssh-key"
+
+fix-warp () {
+  echo "-> FIXING WARP!"
+  WARP_PATH="~/.warp"
+  WARP_PROFILE="wgcf-profile.conf"
+  WARP_ACCOUNT="wgcf-account.toml"
+  WIREGUARD_PATH="/etc/wireguard/"
+
+  # Create WARP path if not exist
+  if [[ ! -e $WARP_PATH ]];then
+    mkdir $WARP_PATH
+  fi
+
+  #Change to warp path
+  cd $WARP_PATH
+
+  # Remove warp files if exists
+  if [[ -e $WARP_PROFILE || -e $WARP_ACCOUNT ]];then
+    echo "FILE exists"
+    wg-quick down wgcf-profile
+    rm $WARP_PROFILE
+    rm $WARP_ACCOUNT
+    sudo rm "$WIREGUARD_PATH/$WARP_PROFILE"
+  fi
+
+  # Create the new WARP profile
+  wgcf register
+  wgcf generate
+  sudo cp $WARP_PROFILE $WIREGUARD_PATH
+  wg-quick up wgcf-profile
+  systemctl enable wg-quick@wgcf-profile
+  cd $HOME
+  echo "-> WARP FIXED!"
+}

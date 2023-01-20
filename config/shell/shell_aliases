@@ -145,6 +145,8 @@ alias hx="helix"
 alias ew="codeaf"
 alias cc="xclip -selection clipboard"
 alias pwdc="pwd | cc"
+alias show-pub="cat ~/.ssh/id_ed25519.pub"
+alias copy-pub="show-pub | cc"
 
 ## Colorize the ls output ##
 alias ls='ls --color=auto'

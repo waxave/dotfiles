@@ -51,9 +51,6 @@ alias cp="cp -v"
 alias htop="sudo htop"
 alias hosts="sudo $EDITOR /etc/hosts"
 
-# Copy my public key to the pasteboard
-alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\n'"
-
 # Git aliases
 # More Git tips http://firstaidgit.io/
 alias gss="git status -s"
@@ -143,13 +140,11 @@ alias cp='cp -vr'
 alias rm='rm -vr'
 
 alias icat="kitty +kitten icat --align=left"
-alias codeaf="cd /home/waxave/snap/exercism/5/exercism/"
+alias codeaf="cd $HOME/snap/exercism/5/exercism/"
 alias hx="helix"
 alias ew="codeaf"
 alias cc="xclip -selection clipboard"
 alias pwdc="pwd | cc"
-alias show-pub="cat ~/.ssh/id_rsa.pub"
-alias copy-pub="show-pub | cc"
 
 ## Colorize the ls output ##
 alias ls='ls --color=auto'

@@ -1,6 +1,6 @@
 [user]
-  name = Jesús Urias
-  email = example@pm.me
+	name =
+	email =
 [alias]
   # Staging
   a = add

@@ -2,6 +2,7 @@
 
 # Reload zsh settings
 source ~/.zshrc
+exec $SHELL -l
 
 # Installing asdf plugins
 asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
@@ -19,5 +20,19 @@ mkdir -p ~/.workspace/other
 
 # Installing fonts
 cp -r $DOTFILES_DIR/extras/fonts/* ~/.local/share/fonts/
+sudo cp -r $DOTFILES_DIR/extras/fonts/* /usr/share/fonts
 
 fc-cache -v
+# Reload bash
+exec $SHELL -l
+
+# Change login background
+sudo cp -r $DOTFILES_DIR/config/awesome/theme/assets/wallpapers/wallhaven-mdoj7m.png /usr/share/backgrounds
+
+# Change the background in
+sudo cp -r $DOTFILES_DIR/extras/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
+
+# Configure git values
+git config --global user.name $DOTFILES_NAME
+git config --global user.email $DOTFILES_EMAIL
+

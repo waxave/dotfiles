@@ -54,7 +54,7 @@ awful.keyboard.append_global_keybindings({
 	awful.key({ mod, ctrl }, "r", awesome.restart, { description = "reload awesome", group = "WM" }),
 
 	-- Quit awesome
-	awful.key({ mod, ctrl }, "q", awesome.quit, { description = "quit awesome", group = "WM" }),
+	-- awful.key({ mod, ctrl }, mod, awesome.quit, { description = "quit awesome", group = "WM" }),
 
 	-- Show help
 	awful.key({ mod, ctrl }, "h", hotkeys_popup.show_help, { description = "show Help", group = "WM" }),
@@ -62,36 +62,36 @@ awful.keyboard.append_global_keybindings({
 	---- Client
 	---------------
 	-- Focus client by direction
-	awful.key({ mod }, "k", function()
+	awful.key({ mod, alt }, "k", function()
 		awful.client.focus.bydirection("up")
 		bling.module.flash_focus.flashfocus(client.focus)
 	end, { description = "focus up", group = "client" }),
-	awful.key({ mod }, "j", function()
+	awful.key({ mod, alt }, "j", function()
 		awful.client.focus.bydirection("down")
 		bling.module.flash_focus.flashfocus(client.focus)
 	end, { description = "focus down", group = "client" }),
-	awful.key({ mod }, "h", function()
+	awful.key({ mod, alt }, "h", function()
 		awful.client.focus.bydirection("left")
 		bling.module.flash_focus.flashfocus(client.focus)
 	end, { description = "focus left", group = "client" }),
-	awful.key({ mod }, "l", function()
+	awful.key({ mod, alt }, "l", function()
 		awful.client.focus.bydirection("right")
 		bling.module.flash_focus.flashfocus(client.focus)
 	end, { description = "focus right", group = "client" }),
 
-	awful.key({ mod }, "Up", function()
+	awful.key({ mod, alt }, "Up", function()
 		awful.client.focus.bydirection("up")
 		bling.module.flash_focus.flashfocus(client.focus)
 	end, { description = "focus up", group = "client" }),
-	awful.key({ mod }, "Down", function()
+	awful.key({ mod, alt }, "Down", function()
 		awful.client.focus.bydirection("down")
 		bling.module.flash_focus.flashfocus(client.focus)
 	end, { description = "focus down", group = "client" }),
-	awful.key({ mod }, "Left", function()
+	awful.key({ mod, alt }, "Left", function()
 		awful.client.focus.bydirection("left")
 		bling.module.flash_focus.flashfocus(client.focus)
 	end, { description = "focus left", group = "client" }),
-	awful.key({ mod }, "Right", function()
+	awful.key({ mod, alt }, "Right", function()
 		awful.client.focus.bydirection("right")
 		bling.module.flash_focus.flashfocus(client.focus)
 	end, { description = "focus right", group = "client" }),
@@ -373,8 +373,8 @@ awful.keyboard.append_global_keybindings({
 -- Move through workspaces
 ----------------------------
 awful.keyboard.append_global_keybindings({
-	awful.key({ mod, alt }, "Left", awful.tag.viewprev, { description = "view previous", group = "tags" }),
-	awful.key({ mod, alt }, "Right", awful.tag.viewnext, { description = "view next", group = "tags" }),
+	awful.key({ mod }, "Left", awful.tag.viewprev, { description = "view previous", group = "tags" }),
+	awful.key({ mod }, "Right", awful.tag.viewnext, { description = "view next", group = "tags" }),
 	awful.key({ mod }, "Tab", awful.tag.viewnext, { description = "view next", group = "tags" }),
 	awful.key({
 		modifiers = { mod },

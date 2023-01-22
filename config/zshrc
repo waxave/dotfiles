@@ -6,15 +6,17 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 #!/bin/bash
+# Load shell exports
+source $HOME/.shell_exports
 
 # source plugins
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+source $DOTFILES_DIR/config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $DOTFILES_DIR/config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $DOTFILES_DIR/config/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $DOTFILES_DIR/config/zsh/plugins/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # Load the shell dotfiles
-for file in $HOME/.{shell_exports,shell_aliases,shell_functions,shell_config}; do
+for file in $HOME/.{shell_aliases,shell_functions,shell_config}; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
@@ -23,9 +25,6 @@ unset file;
 if [ "$TERM" = "linux" ] ; then
     echo -en "\e]P0232323"
 fi
-
-# init starship
-# eval "$(starship init zsh)"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
 

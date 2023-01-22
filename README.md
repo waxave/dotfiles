@@ -1,7 +1,10 @@
 ## Installation
 
 ```sh
-$ git clone https://github.com/waxave/laptop.git ~/.dotfiles
+# For PC env
+$ git clone --single-branch --branch pc https://github.com/waxave/dotfiles.git ~/.dotfiles
+ # For laptop env
+$ git clone --single-branch --branch laptop https://github.com/waxave/dotfiles.git ~/.dotfiles
 $ cd ~/.dotfiles
 
 # Modify the config/shell/shell_exports file to desired values

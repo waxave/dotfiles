@@ -1,7 +1,7 @@
 [user]
-  name = ""
-  email = ""
-	signingkey = ""
+  name =
+  email =
+	signingkey =
 [alias]
   # Staging
   a = add
@@ -181,3 +181,5 @@
 	defaultBranch = main
 [commit]
 	gpgsign = true
+[gpg]
+	program = gpg

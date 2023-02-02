@@ -2,9 +2,8 @@
 
 # Installation of required packages
 sudo pacman -S --needed base-devel yay starship curl git kakoune neovim wireguard-tools ripgrep fd papirus-icon-theme vim
-yay -S paru kitty visual-studio-code-bin wgcf bat firefox-developer-edition helix
-paru -S awesome-git
-paru -Sy picom-git alacritty rofi todo-bin acpi acpid acpi_call \
+yay -Sy kitty visual-studio-code-bin wgcf bat firefox-developer-edition helix \
+  awesome-git picom-git alacritty rofi todo-bin acpi acpid acpi_call \
   upower jq inotify-tools polkit-gnome xdotool xclip gpick ffmpeg \
   blueman pamixer brightnessctl scrot redshift feh mpv mpd mpc \
   mpdris2 ncmpcpp playerctl --needed

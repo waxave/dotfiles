@@ -112,12 +112,6 @@ for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
 done
 
 ## Alias section
-alias cp="cp -i"                                                # Confirm before overwriting something
-alias df='df -h'                                                # Human-readable sizes
-alias free='free -m'                                            # Show sizes in MB
-alias gitu='git add . && git commit && git push'
-alias grub-update='sudo grub-mkconfig -o /boot/grub/grub.cfg'
-alias mirror-update='sudo reflector --verbose -c Indonesia -c Japan -c Singapore --sort rate --save /etc/pacman.d/mirrorlist'
 alias mtar='tar -zcvf' # mtar <archive_compress>
 alias utar='tar -zxvf' # utar <archive_decompress> <file_list>
 alias z='zip -r' # z <archive_compress> <file_list>
@@ -126,7 +120,6 @@ alias sr='source ~/.zshrc'
 alias ..="cd .."
 alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"
 alias mkdir="mkdir -p"
-alias fm='ranger'
 alias pacs="pacman -Slq | fzf -m --preview 'cat <(pacman -Si {1}) <(pacman -Fl {1} | awk \"{print \$2}\")' | xargs -ro sudo pacman -S"
 alias pars="paru -Slq | fzf -m --preview 'cat <(paru -Si {1}) <(paru -Fl {1} | awk \"{print \$2}\")' | xargs -ro  paru -S"
 alias pacr="pacman -Qq | fzf --multi --preview 'pacman -Qi {1}' | xargs -ro sudo pacman -Rns"
@@ -140,13 +133,11 @@ alias cp='cp -vr'
 alias rm='rm -vr'
 
 alias icat="kitty +kitten icat --align=left"
-alias codeaf="cd $HOME/snap/exercism/5/exercism/"
 alias hx="helix"
-alias ew="codeaf"
 alias cc="xclip -selection clipboard"
 alias pwdc="pwd | cc"
-alias show-pub="cat ~/.ssh/id_ed25519.pub"
-alias copy-pub="show-pub | cc"
+alias eworkspace="cd $(exercism workspace)"
+alias ew="eworkspace"
 
 ## Colorize the ls output ##
 alias ls='ls --color=auto'

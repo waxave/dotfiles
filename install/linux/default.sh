@@ -30,3 +30,7 @@ sudo cp -r $DOTFILES_DIR/config/awesome/theme/assets/wallpapers/wallhaven-mdoj7m
 
 # Change the background in
 sudo cp -r $DOTFILES_DIR/extras/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
+
+# Configure git values
+git config --global user.name $DOTFILES_NAME
+git config --global user.email $DOTFILES_EMAIL

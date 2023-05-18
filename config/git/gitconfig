@@ -1,6 +1,6 @@
 [user]
-  name =
-  email =
+	name =
+	email =
 	signingkey =
 [alias]
   # Staging
@@ -146,6 +146,7 @@
   pushInsteadOf = "github:"
   pushInsteadOf = "git://github.com/"
   pushInsteadOf = "https://github.com/"
+	insteadOf = https://github.com/
 
 [url "git://github.com/"]
   insteadOf = "github:"
@@ -179,7 +180,5 @@
   prune = true
 [init]
 	defaultBranch = main
-[commit]
-	gpgsign = true
 [gpg]
 	program = gpg

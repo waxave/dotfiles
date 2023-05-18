@@ -25,9 +25,13 @@ setopt histignorealldups                                        # If a new comma
 setopt inc_append_history                                       # save commands are added to the history immediately, otherwise only when shell exits.
 setopt histignorespace                                          # Don't save commands that start with space
 
-# Loading asdf
-. $HOME/.asdf/asdf.sh
-fpath=(${ASDF_DIR}/completions $fpath)
+# Loading asdf# Loading asdf
+if [ "$OS_NAME" = "Darwin" ] ; then
+  . $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
+else
+  . $HOME/.asdf/asdf.sh
+  fpath=(${ASDF_DIR}/completions $fpath)
+fi
 
 # enable completion features
 autoload -Uz compinit

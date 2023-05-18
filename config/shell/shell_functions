@@ -197,7 +197,11 @@ toppy() {
 }
 
 cd() {
-	builtin cd "$@" && command ls --group-directories-first --color=auto -F
+  if [ "$OS_NAME" = "Darwin" ] ; then
+    builtin cd "$@" && command lsd -la
+  else
+    builtin cd "$@" && command ls --group-directories-first --color=auto -F
+  fi
 }
 
 mcd () {

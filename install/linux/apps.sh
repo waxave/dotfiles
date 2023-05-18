@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Installation of required packages
-sudo pacman -S --needed base-devel yay starship curl git kakoune neovim wireguard-tools ripgrep fd papirus-icon-theme vim
+sudo pacman -S --needed base-devel yay curl git kakoune neovim wireguard-tools ripgrep fd papirus-icon-theme vim
 yay -S paru kitty visual-studio-code-bin wgcf bat firefox-developer-edition helix
 paru -S awesome-git
 paru -Sy picom-git alacritty rofi todo-bin acpi acpid acpi_call \
@@ -15,6 +15,9 @@ git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
 # Enable music daemon player
 systemctl --user enable mpd.service
 systemctl --user start mpd.service
+
+# Install p10k
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 
 # Install Plug for vim
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
